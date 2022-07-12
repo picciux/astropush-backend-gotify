@@ -1,0 +1,128 @@
+#! /bin/bash
+
+#    Gotify backend for Astroberry-Push, a simple push notification layer for Astroberry.
+#    Copyright (C) 2022  Matteo Piscitelli <matteo@matteopiscitelli.it>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# Gotify backend initialization script
+
+if [ "$( whoami )" != "root" ]; then
+  echo "Error: must be root to run this. Try 'sudo $0'"
+  echo
+  exit 1
+fi
+
+# first parameter is optional destination prefix
+DCFG=$1/etc/astroberry-push/backend.gotify.conf
+
+if [ -e $DCFG ]; then
+  echo "Gotify backend configuration present."
+  exit 0
+fi
+
+echo "Initializing Gotify backend."
+
+#BACKEND_DIR=/usr/share/astroberry-push/backends/gotify
+BACKEND_DIR=$( realpath $( dirname $0 ) )
+
+ICONS=$BACKEND_DIR/app-icons
+SCFG=$BACKEND_DIR/backend.gotify.conf.templ
+
+echo "You must be running a Gotify service here on local host or somewhere on your network"
+echo "to proceed with gotify backend setup. If you are not ready to proceed now, answer 'no':"
+echo "when you're ready with a running Gotify service, you'll be able to complete the setup "
+echo "resuming this procedure by running"
+echo
+echo "   sudo $( realpath $0 ) "
+echo
+read -p "Proceed with installation (yes|no) ? " ans
+echo
+
+if [ "$ans" != "yes" ]; then
+    echo "Exiting. Bye!"
+    exit 0
+fi
+
+HOST=localhost
+
+echo "Please provide your running Gotify service host address: it usually is 'localhost',"
+echo "if you're running Gotify service on this computer."
+read -p "Gotify service host address (default: '$HOST') ? " temp_host
+echo
+
+if [ "$temp_host" ]; then
+    HOST="$temp_host"
+fi
+
+API="http://$HOST/gotify"
+
+echo "Please provide your running Gotify service complete API address:"
+echo "it could be 'http://$HOST', 'http://$HOST:<port>', "
+echo "'http://$HOST/gotify' or something similar, depending on how and "
+echo "where gotify service is installed."
+read -p "Gotify service API address (default: '$API') ? " temp_api
+echo
+
+if [ "$temp_api" ]; then
+    API="$temp_api"
+fi
+
+USER=astroberry
+PWD=astroberry
+
+json_extract() {
+  python -c "import sys, json; print(json.load(sys.stdin)['$1'])"
+}
+
+# add_application(clientToken, appName, appDescription, moduleName)
+add_application() {
+  app=$( curl --silent $API/application?token=$1 -F "name=$2" -F "description=$3" )
+  appid=$( echo $app | json_extract id )
+  apptoken=$( echo $app | json_extract token )
+  curl --silent $API/application/$appid/image?token=$1 -F "id=$appid" -F "file=@$BACKEND_DIR/app-icons/$4.png" > /dev/null
+  echo "$4=\"$apptoken\"" >> $DCFG
+  echo -n "$4 "
+}
+
+echo -n "Login to Gotify service... "
+# login and obtain client token
+me=$( curl --silent --user ${USER}:${PWD} $API/client -F "name=gotify-init" )
+myid=$( echo $me | json_extract id )
+mytoken=$( echo $me | json_extract token )
+echo "done."
+
+# init config
+cat $SCFG > $DCFG
+
+echo -n "Creating application: "
+# add applications
+add_application $mytoken Astroberry "Astroberry server system" astroberry
+add_application $mytoken KStars "KStars/Ekos astrophotography suite" kstars
+add_application $mytoken Alignment "Ekos Alignment module" alignment
+add_application $mytoken Capture "Ekos Capture module" capture
+add_application $mytoken Focus "Ekos Focus module" focus
+add_application $mytoken Guide "Ekos Guide module" guide
+add_application $mytoken Mount "Ekos Mount module" mount
+add_application $mytoken Scheduler "Ekos Scheduler module" scheduler
+
+echo >> $DCFG
+echo ". Done."
+
+echo -n "Logging out... " 
+#remove client
+curl --silent -X DELETE $API/client/$myid?token=$mytoken > /dev/null
+echo "done."
+echo "Initialization completed: your Astroberry-Push Gotify backend if fully functional now."
+echo
