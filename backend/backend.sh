@@ -16,15 +16,18 @@
 
 # Gotify backend implementation
 
-# default
-host='localhost'
-hostdesc=''
-
-source "$CONFIG_DIR/backend.gotify.conf"
-
-if [ "$host" != "localhost" ]; then hostdesc="@$( hostname )"; fi
+BACKEND_VERSION="1.0"
 
 push_gotify() {
+  # default
+  host='localhost'
+  hostdesc=''
+
+  [ -f "$CONFIG_DIR/backend.gotify.conf" ] || { echo >&2 "Config for Gotify backend not found!"; exit 1; }
+  source "$CONFIG_DIR/backend.gotify.conf"
+
+  if [ "$host" != "localhost" ]; then hostdesc="@$( hostname )"; fi
+
   prio=5
 
   case "$1" in
