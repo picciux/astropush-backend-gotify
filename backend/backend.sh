@@ -1,5 +1,5 @@
-#    Gotify backend for Astroberry-Push, a simple push notification layer for Astroberry.
-#    Copyright (C) 2022  Matteo Piscitelli <matteo@matteopiscitelli.it>
+#    Gotify backend for AstroPush, a simple push notification layer.
+#    Copyright (C) 2022-2023  Matteo Piscitelli <matteo@matteopiscitelli.it>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -20,20 +20,21 @@ BACKEND_VERSION="1.0"
 
 push_gotify() {
   # default
-  host='localhost'
+  api='http://localhost:8627'
   hostdesc=''
 
   [ -f "$CONFIG_DIR/backend.gotify.conf" ] || { echo >&2 "Config for Gotify backend not found!"; exit 1; }
   source "$CONFIG_DIR/backend.gotify.conf"
 
-  if [ "$host" != "localhost" ]; then hostdesc="@$( hostname )"; fi
+  # Add host description if we're notifying through a remote server
+  [[ "$api" =~ "localhost" ]] || hostdesc="@$( hostname )"
 
   prio=5
 
   case "$1" in
-	"astroberry")
-	app_token="$astroberry"
-	title="Astroberry$hostdesc"
+	"os")
+	app_token="$os"
+	title="OS$hostdesc"
 	;;
 
 	"alignment")
@@ -72,7 +73,7 @@ push_gotify() {
 	;;
 
 	*)
-	app_token="$astroberry"
+	app_token="$os"
 	title="Sconosciuto: $1$hostdesc"
 	;;
 
@@ -100,6 +101,6 @@ push_gotify() {
 	;;
   esac
 
-  curl --silent "http://$host/gotify/message?token=$app_token" -F "title=$title" -F "message=$2" -F "priority=$prio" > /dev/null
+  curl --silent "$api/message?token=$app_token" -F "title=$title" -F "message=$2" -F "priority=$prio" > /dev/null
 
 }

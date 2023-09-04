@@ -1,0 +1,22 @@
+#
+# AstroPush notifications 
+# Gotify backend configuration
+#
+
+# API for running Gotify service (usually 'http://localhost:8627')
+# api='http://localhost:8627'
+
+# Notification "modules" ("apps" in gotify language) authentication tokens
+# 
+# Modules are: os, kstars, alignment, capture, focus, guide, mount, scheduler
+# 
+# Examples
+# os="<os auth token>"
+# kstars="<kstars auth token>"
+# alignment="<alignment auth token>"
+# capture="<capture auth token>"
+# focus="<focus auth token>"
+# guide="<guide auth token>"
+# mount="<mount auth token>"
+# scheduler="<scheduler auth token>"
+

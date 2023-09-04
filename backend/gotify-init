@@ -1,7 +1,7 @@
 #! /bin/bash
 
-#    Gotify backend for Astroberry-Push, a simple push notification layer for Astroberry.
-#    Copyright (C) 2022  Matteo Piscitelli <matteo@matteopiscitelli.it>
+#    Gotify backend for AstroPush, a simple push notification layer.
+#    Copyright (C) 2022-2023  Matteo Piscitelli <matteo@matteopiscitelli.it>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ if [ "$( whoami )" != "root" ]; then
 fi
 
 # first parameter is optional destination prefix
-DCFG=$1/etc/astroberry-push/backend.gotify.conf
+DCFG=$1/etc/astropush/backend.gotify.conf
 
 if [ -e $DCFG ]; then
   echo "Gotify backend configuration present."
@@ -34,7 +34,7 @@ fi
 
 echo "Initializing Gotify backend."
 
-#BACKEND_DIR=/usr/share/astroberry-push/backends/gotify
+#BACKEND_DIR=/usr/share/astropush/backends/gotify
 BACKEND_DIR=$( realpath $( dirname $0 ) )
 
 ICONS=$BACKEND_DIR/app-icons
@@ -55,32 +55,19 @@ if [ "$ans" != "yes" ]; then
     exit 0
 fi
 
-HOST=localhost
+API='http://localhost:8627'
 
-echo "Please provide your running Gotify service host address: it usually is 'localhost',"
-echo "if you're running Gotify service on this computer."
-read -p "Gotify service host address (default: '$HOST') ? " temp_host
-echo
-
-if [ "$temp_host" ]; then
-    HOST="$temp_host"
-fi
-
-API="http://$HOST/gotify"
-
-echo "Please provide your running Gotify service complete API address:"
-echo "it could be 'http://$HOST', 'http://$HOST:<port>', "
-echo "'http://$HOST/gotify' or something similar, depending on how and "
-echo "where gotify service is installed."
-read -p "Gotify service API address (default: '$API') ? " temp_api
+echo "Please provide your running Gotify service complete api url: it usually is '$API',"
+echo "if you're running Gotify service on this computer at default port and without any proxy."
+read -p "Gotify service url (default: $API) ? " temp_api
 echo
 
 if [ "$temp_api" ]; then
     API="$temp_api"
 fi
 
-USER=astroberry
-PWD=astroberry
+USER=astropush
+PWD=astropush
 
 json_extract() {
   python -c "import sys, json; print(json.load(sys.stdin)['$1'])"
@@ -106,9 +93,13 @@ echo "done."
 # init config
 cat $SCFG > $DCFG
 
+# Save api url
+echo "api='$API'" >> $DCFG
+echo >> $DCFG
+
 echo -n "Creating application: "
 # add applications
-add_application $mytoken Astroberry "Astroberry server system" astroberry
+add_application $mytoken OS "Operating System" os
 add_application $mytoken KStars "KStars/Ekos astrophotography suite" kstars
 add_application $mytoken Alignment "Ekos Alignment module" alignment
 add_application $mytoken Capture "Ekos Capture module" capture
@@ -124,5 +115,5 @@ echo -n "Logging out... "
 #remove client
 curl --silent -X DELETE $API/client/$myid?token=$mytoken > /dev/null
 echo "done."
-echo "Initialization completed: your Astroberry-Push Gotify backend if fully functional now."
+echo "Initialization completed: your AstroPush Gotify backend if fully functional now."
 echo

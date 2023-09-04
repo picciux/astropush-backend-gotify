@@ -1,2 +1,2 @@
-# astroberry-push-backend-gotify
-Backend for Astroberry-Push to push notification through a Gotify server.
+# astropush-backend-gotify
+Backend for AstroPush to push notification through a Gotify server.
