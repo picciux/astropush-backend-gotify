@@ -87,7 +87,8 @@ sudo cp -r $MYDIR/backend/* "$BACKENDS_DIR/gotify/"
 sudo $BACKENDS_DIR/gotify/gotify-init $PREFIX
 
 echo "### Gotify backend installed!"
-echo "### Don't forget to enable it editing /etc/astropush/push.conf"
+echo "### Don't forget to enable it editing /etc/astropush/push.conf "
+echo "### (and /etc/astropush/backend.gotify.conf if needed)."
 echo
 
 

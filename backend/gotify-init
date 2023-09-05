@@ -48,6 +48,16 @@ echo "resuming this procedure by running"
 echo
 echo "   sudo $( realpath $0 ) "
 echo
+echo "Alternatively, you'll find a commented sample config file at "
+echo
+echo "   /usr/share/astropush/backends/gotify/backend.gotify.conf.sample"
+echo
+echo "You can move it to "
+echo 
+echo "   /etc/astropush/backend.gotify.conf "
+echo 
+echo "and manually tweak its content to suit your needs."
+echo 
 read -p "Proceed with installation (yes|no) ? " ans
 echo
 
