@@ -18,6 +18,8 @@
 
 # Gotify backend initialization script
 
+PYTHON=/usr/bin/python3
+
 if [ "$( whoami )" != "root" ]; then
   echo "Error: must be root to run this. Try 'sudo $0'"
   echo
@@ -34,7 +36,6 @@ fi
 
 echo "Initializing Gotify backend."
 
-#BACKEND_DIR=/usr/share/astropush/backends/gotify
 BACKEND_DIR=$( realpath $( dirname $0 ) )
 
 ICONS=$BACKEND_DIR/app-icons
@@ -55,7 +56,7 @@ if [ "$ans" != "yes" ]; then
     exit 0
 fi
 
-API='http://localhost:8627'
+API='http://localhost'
 
 echo "Please provide your running Gotify service complete api url: it usually is '$API',"
 echo "if you're running Gotify service on this computer at default port and without any proxy."
@@ -70,7 +71,7 @@ USER=astropush
 PWD=astropush
 
 json_extract() {
-  python -c "import sys, json; print(json.load(sys.stdin)['$1'])"
+  $PYTHON -c "import sys, json; print(json.load(sys.stdin)['$1'])"
 }
 
 # add_application(clientToken, appName, appDescription, moduleName)

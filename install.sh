@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ##############################################################
-# Astroberry-Push Gotify backend install script              #
+# AstroPush Gotify backend install script              #
 ##############################################################
 
 PREFIX=
@@ -57,21 +57,21 @@ done
 MYDIR=$( dirname $0 )
 MYDIR=$( realpath "$MYDIR" )
 
-BACKENDS_DIR=$PREFIX/usr/share/astroberry-push/backends
-CFG_DIR=$PREFIX/etc/astroberry-push
+BACKENDS_DIR=$PREFIX/usr/share/astropush/backends
+CFG_DIR=$PREFIX/etc/astropush
 
 if [ ! -d "$CFG_DIR" ]; then
-    echo "Error: config directory missing. Is astroberry-push frontend installed?" 1>&2
+    echo "Error: config directory missing. Is astropush frontend installed?" 1>&2
     exit 1
 fi
 
 if [ ! -d "$BACKENDS_DIR" ]; then
-    echo "Error: backends directory missing. Is astroberry-push frontend installed?" 1>&2
+    echo "Error: backends directory missing. Is astropush frontend installed?" 1>&2
     exit 1
 fi
 
 if [ "$1" = "uninstall" ]; then
-    echo "### Uninstalling astroberry-push gotify backend..."
+    echo "### Uninstalling astropush gotify backend..."
     sudo rm -R "$BACKENDS_DIR/gotify"
     if [ -f "$CFG_DIR/backend.gotify.conf" ]; then
         sudo rm "$CFG_DIR/backend.gotify.conf"
@@ -80,14 +80,14 @@ if [ "$1" = "uninstall" ]; then
     exit 0
 fi
 
-echo "### Installing astroberry-push gotify backend..."
+echo "### Installing astropush gotify backend..."
 sudo mkdir -p "$BACKENDS_DIR/gotify"
 sudo cp -r $MYDIR/backend/* "$BACKENDS_DIR/gotify/"
 
 sudo $BACKENDS_DIR/gotify/gotify-init $PREFIX
 
 echo "### Gotify backend installed!"
-echo "### Don't forget to enable it editing /etc/astroberry-push/push.conf"
+echo "### Don't forget to enable it editing /etc/astropush/push.conf"
 echo
 
 

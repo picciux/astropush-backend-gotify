@@ -6,11 +6,28 @@
 # API for running Gotify service (usually 'http://localhost:8627')
 # api='http://localhost:8627'
 
-# Notification "modules" ("apps" in gotify language) authentication tokens
+# Auth tokens.
+# To send notifications to Gotify, AstroPush (or any other service/system)
+# needs authenticate with an "App token". Tokens can be created at Gotify
+# web app, logging in as an administrative user and entering the "Apps"
+# section. You can create as many apps as desidered: every one will have 
+# its token and every notification received will be matched with and 
+# grouped by its corresponded app.
+
+# AstroPush can send notifications as a single Gotify app: all notifications
+# sent from here will be grouped at destination (Gotify web/device app) 
+# under a single tab. Uncomment and provide auth token for it.
+#
+# app_token="<single app token>"
+
+# AstroPush can send notifications using an app auth token for "module".
+# Modules are basically the Ekos modules, plus two generic ('os', 'kstars')
+# to accomodate notifications not directly related with Ekos.
+# They are: os, kstars, alignment, capture, focus, guide, mount, scheduler.
+# Any uncommented and not empty module token will be used in place of 
+# 'auth_token' above when to-be-sent notification belongs to correspondent
+# module.
 # 
-# Modules are: os, kstars, alignment, capture, focus, guide, mount, scheduler
-# 
-# Examples
 # os="<os auth token>"
 # kstars="<kstars auth token>"
 # alignment="<alignment auth token>"

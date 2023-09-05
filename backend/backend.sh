@@ -16,7 +16,7 @@
 
 # Gotify backend implementation
 
-BACKEND_VERSION="1.0"
+BACKEND_VERSION="2.0"
 
 push_gotify() {
   # default
@@ -33,51 +33,56 @@ push_gotify() {
 
   case "$1" in
 	"os")
-	app_token="$os"
+	[ "$os" != "" ] && app_token="$os"
 	title="OS$hostdesc"
 	;;
 
 	"alignment")
-	app_token="$alignment"
+	[ "$alignment" != "" ] && app_token="$alignment"
 	title="Alignment$hostdesc"
 	;;
 
 	"capture")
-	app_token="$capture"
+	[ "$capture" != "" ] && app_token="$capture"
 	title="Capture$hostdesc"
 	;;
 
 	"focus")
-	app_token="$focus"
+	[ "$focus" != "" ] && app_token="$focus"
 	title="Focus$hostdesc"
 	;;
 
 	"kstars")
-	app_token="$kstars"
+	[ "$kstars" != "" ] && app_token="$kstars"
 	title="KStars$hostdesc"
 	;;
 
 	"guide")
-	app_token="$guide"
+	[ "$guide" != "" ] && app_token="$guide"
 	title="Guide$hostdesc"
 	;;
 
 	"mount")
-	app_token="$mount"
+	[ "$mount" != "" ] && app_token="$mount"
 	title="Mount$hostdesc"
 	;;
 
 	"scheduler")
-	app_token="$scheduler"
+	[ "$scheduler" != "" ] && app_token="$scheduler"
 	title="Scheduler$hostdesc"
 	;;
 
 	*)
-	app_token="$os"
+	[ "$os" != "" ] && app_token="$os"
 	title="Sconosciuto: $1$hostdesc"
 	;;
 
   esac
+
+  if [ "$app_token" = "" ]; then
+	"No app token available"
+	exit 1
+  fi
 
   case $3 in
 	#verbose
