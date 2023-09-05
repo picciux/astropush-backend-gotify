@@ -126,5 +126,5 @@ echo -n "Logging out... "
 #remove client
 curl --silent -X DELETE $API/client/$myid?token=$mytoken > /dev/null
 echo "done."
-echo "Initialization completed: your AstroPush Gotify backend if fully functional now."
+echo "Initialization completed: your AstroPush Gotify backend is fully functional now."
 echo
