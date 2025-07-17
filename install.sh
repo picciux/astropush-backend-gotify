@@ -77,6 +77,8 @@ if [ "$UNINSTALL" = "yes" ]; then
     if [ -f "$CFG_DIR/backend.gotify.conf" ]; then
         rm "$CFG_DIR/backend.gotify.conf"
     fi
+    rm "$DOC_DIR/README.backend.gotify.md"
+    rm "$DOC_DIR/LICENSE.backend.gotify"
     echo "### Done!"
     exit 0
 fi
