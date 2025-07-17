@@ -59,6 +59,7 @@ MYDIR=$( realpath "$MYDIR" )
 
 BACKENDS_DIR=$PREFIX/usr/share/astropush/backends
 CFG_DIR=$PREFIX/etc/astropush
+DOC_DIR=$PREFIX/usr/share/doc/astropush
 
 if [ ! -d "$CFG_DIR" ]; then
     echo "Error: config directory missing. Is astropush frontend installed?" 1>&2
@@ -70,25 +71,29 @@ if [ ! -d "$BACKENDS_DIR" ]; then
     exit 1
 fi
 
-if [ "$1" = "uninstall" ]; then
+if [ "$UNINSTALL" = "yes" ]; then
     echo "### Uninstalling astropush gotify backend..."
-    sudo rm -R "$BACKENDS_DIR/gotify"
+    rm -R "$BACKENDS_DIR/gotify"
     if [ -f "$CFG_DIR/backend.gotify.conf" ]; then
-        sudo rm "$CFG_DIR/backend.gotify.conf"
+        rm "$CFG_DIR/backend.gotify.conf"
     fi
     echo "### Done!"
     exit 0
 fi
 
 echo "### Installing astropush gotify backend..."
-sudo mkdir -p "$BACKENDS_DIR/gotify"
-sudo cp -r $MYDIR/backend/* "$BACKENDS_DIR/gotify/"
-
-sudo $BACKENDS_DIR/gotify/gotify-init $PREFIX
+install -d "$BACKENDS_DIR/gotify/app-icons"
+install -m 644 "$MYDIR/backend/backend.gotify.conf.sample" $BACKENDS_DIR/gotify/
+install -m 644 "$MYDIR/backend/backend.sh" "$MYDIR/backend/gotify-init" $BACKENDS_DIR/gotify/
+install -m 644 "$MYDIR/backend/backend.gotify.conf.sample" $CFG_DIR/backend.gotify.conf
+install -m 644 "$MYDIR/README.md" "$DOC_DIR/README.backend.gotify.md"
+install -m 644 "$MYDIR/LICENSE" "$DOC_DIR/LICENSE.backend.gotify"
 
 echo "### Gotify backend installed!"
-echo "### Don't forget to enable it editing /etc/astropush/push.conf "
-echo "### (and /etc/astropush/backend.gotify.conf if needed)."
+echo "### Next steps, check "
+echo "###     $CFG_DIR/push.conf"
+echo "###     $CFG_DIR/backend.gotify.conf"
+echo "### to enable and configure it system-wide."
+echo "### Check documentation for details."
 echo
-
 

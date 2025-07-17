@@ -9,9 +9,7 @@ This is the AstroPush backend to route notifications through stand-alone [Gotify
 
 ### Installation
 1. Run `install.sh` script in this directory
-2. The script will ask if you have a running Gotify service reachable somewhere. If that's the case, answer *yes* and continue. Otherwise, answer *no*. You can resume the installation later running `sudo /usr/share/astropush/backends/gotify/gotify-init`	
-3. If you answered *yes*, the script will ask for your running Gotify service API URL address: if you have installed the gotify support files from `gotify_support_files` folder, you need to enter: `http://localhost:8627` otherwise, you have to provide it yourself.
-4. Edit AstroPush main config `/etc/astropush/push.conf` (you need sudo) and enable this backend following comments inside the file itself.
+2. As an admin you can edit AstroPush main config `/etc/astropush/push.conf`  and `/etc/astropush/backend.gotify.conf` to enable and configure this backend following comments inside the files itself.
+3. Alternatively, every user can override the system configuration creating and editing `push.conf` and `astropush-backend.gotify.conf` inside `~/.config` folder, thus using their own key and token.
 
-
-
+You're done! From a terminal, try: `> astropush os 'This is a test' info`. You should receive a notification on your Gotify connected device(s).

@@ -23,11 +23,11 @@ push_gotify() {
   api='http://localhost:8627'
   hostdesc=''
 
-  [ -f "$CONFIG_DIR/backend.gotify.conf" ] || { echo >&2 "Config for Gotify backend not found!"; exit 1; }
-  source "$CONFIG_DIR/backend.gotify.conf"
+  # Source system config
+  [ -f "$CONFIG_DIR/backend.gotify.conf" ] && source "$CONFIG_DIR/backend.gotify.conf"
 
   # override with user config
-  [ -f "$USER_CONFIG_BE_PREFIX.gotify.conf" ] && source $USER_CONFIG_BE_PREFIX.gotify.conf
+  [ -f "$USER_CONFIG_BE_PREFIX.gotify.conf" ] && source "$USER_CONFIG_BE_PREFIX.gotify.conf"
 
   # Add host description if we're notifying through a remote server
   [[ "$api" =~ "localhost" ]] || hostdesc="@$( hostname )"

@@ -20,33 +20,32 @@
 
 PYTHON=/usr/bin/python3
 
-if [ "$( whoami )" != "root" ]; then
-  echo "Error: must be root to run this. Try 'sudo $0'"
+if [ -z "$1" ]; then
+  echo "USAGE: $0 <filename> "
+  echo
+  echo "where <filename> is the filename to save generated configuration to."
+  echo
   echo
   exit 1
 fi
 
-# first parameter is optional destination prefix
-DCFG=$1/etc/astropush/backend.gotify.conf
+DCFG="$1"
 
-if [ -e $DCFG ]; then
-  echo "Gotify backend configuration present."
-  exit 0
-fi
+# Test file writability
+touch "$DCFG" || { echo "Failed writing to '$DCFG'. Cannot proceed."; exit 1; }
 
 echo "Initializing Gotify backend."
 
 BACKEND_DIR=$( realpath $( dirname $0 ) )
 
 ICONS=$BACKEND_DIR/app-icons
-SCFG=$BACKEND_DIR/backend.gotify.conf.templ
 
 echo "You must be running a Gotify service here on local host or somewhere on your network"
 echo "to proceed with gotify backend setup. If you are not ready to proceed now, answer 'no':"
 echo "when you're ready with a running Gotify service, you'll be able to complete the setup "
 echo "resuming this procedure by running"
 echo
-echo "   sudo $( realpath $0 ) "
+echo "   $( realpath $0 ) "
 echo
 echo "Alternatively, you'll find a commented sample config file at "
 echo
@@ -63,10 +62,11 @@ echo
 
 if [ "$ans" != "yes" ]; then
     echo "Exiting. Bye!"
+    rm $DCFG
     exit 0
 fi
 
-API='http://localhost'
+API='http://localhost:8627'
 
 echo "Please provide your running Gotify service complete api url: it usually is '$API',"
 echo "if you're running Gotify service on this computer at default port and without any proxy."
@@ -77,8 +77,34 @@ if [ "$temp_api" ]; then
     API="$temp_api"
 fi
 
-USER=astropush
-PWD=astropush
+USER=
+PWD=
+
+echo "Please provide a valid username with administrative privileges on Gotify server"
+read -p "Gotify administrator username? " temp_user
+echo
+
+if [ "$temp_user" ]; then
+    USER="$temp_user"
+else
+    echo "Cannot procedd without Gotify administrator."
+    rm $DCFG
+    exit 0
+fi
+
+echo "Please provide the password for $USER Gotify user: "
+echo "provided username and password won't be saved anywhere and"
+echo "will be used only to generate the app token on Gotify server."
+read -p "$USER password? " temp_pwd
+echo
+
+if [ "$temp_pwd" ]; then
+    PWD="$temp_pwd"
+else
+    echo "Cannot procedd without administrator password."
+    rm $DCFG
+    exit 0
+fi
 
 json_extract() {
   $PYTHON -c "import sys, json; print(json.load(sys.stdin)['$1'])"
@@ -91,7 +117,7 @@ add_application() {
   apptoken=$( echo $app | json_extract token )
   curl --silent $API/application/$appid/image?token=$1 -F "id=$appid" -F "file=@$BACKEND_DIR/app-icons/$4.png" > /dev/null
   echo "$4=\"$apptoken\"" >> $DCFG
-  echo -n "$4 "
+  echo -n "$2 "
 }
 
 echo -n "Login to Gotify service... "
@@ -101,14 +127,18 @@ myid=$( echo $me | json_extract id )
 mytoken=$( echo $me | json_extract token )
 echo "done."
 
-# init config
-cat $SCFG > $DCFG
+cat <<- EOF > $DCFG
 
-# Save api url
-echo "api='$API'" >> $DCFG
-echo >> $DCFG
+##########################################
+# AstroPush Gotify backend configuration #
+##########################################
 
-echo -n "Creating application: "
+api='$API'
+
+EOF
+
+echo -n "Creating applications... "
+
 # add applications
 add_application $mytoken OS "Operating System" os
 add_application $mytoken KStars "KStars/Ekos astrophotography suite" kstars
@@ -120,11 +150,12 @@ add_application $mytoken Mount "Ekos Mount module" mount
 add_application $mytoken Scheduler "Ekos Scheduler module" scheduler
 
 echo >> $DCFG
-echo ". Done."
+
+echo "Done."
 
 echo -n "Logging out... " 
 #remove client
-curl --silent -X DELETE $API/client/$myid?token=$mytoken > /dev/null
+#curl --silent -X DELETE $API/client/$myid?token=$mytoken > /dev/null
 echo "done."
-echo "Initialization completed: your AstroPush Gotify backend is fully functional now."
+echo "Initialization completed: related configuration is in '$DCFG'."
 echo
