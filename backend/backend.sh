@@ -16,7 +16,7 @@
 
 # Gotify backend implementation
 
-BACKEND_VERSION="2.0"
+BACKEND_VERSION="2.1"
 
 push_gotify() {
   # default
