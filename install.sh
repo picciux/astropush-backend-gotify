@@ -85,6 +85,9 @@ fi
 
 echo "### Installing astropush gotify backend..."
 install -d "$BACKENDS_DIR/gotify/app-icons"
+for ic in $( ls $MYDIR/backend/app-icons/*.png ); do
+	install -m 644 "$ic" $BACKENDS_DIR/gotify/app-icons/
+done
 install -m 644 "$MYDIR/backend/backend.gotify.conf.sample" $BACKENDS_DIR/gotify/
 install -m 644 "$MYDIR/backend/backend.sh" "$MYDIR/backend/gotify-init" $BACKENDS_DIR/gotify/
 install -m 644 "$MYDIR/backend/backend.gotify.conf.sample" $CFG_DIR/backend.gotify.conf
