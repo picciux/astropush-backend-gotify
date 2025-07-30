@@ -1,0 +1,21 @@
+Source: astropush-backend-gotify
+Section: misc
+Priority: optional
+Maintainer: Matteo Piscitelli <matteo@matteopiscitelli.it>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.5.1
+Homepage: https://github.com/picciux/astropush-backend-gotify.git
+Rules-Requires-Root: no
+
+Package: astropush-backend-gotify
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}, astropush
+Description: Simple push notification abstraction layer for Kstars/Ekos.
+ Astropush is writenn with robotic astronomic observatory in mind:
+ it provides an abstraction layer between KStars notification system,
+ and one of many push notification transports (from simple email to the
+ most fancy paid notification service).
+ .
+ This backend uses Gotify server (https://gotify.net) to relay
+ Astropush notifications.

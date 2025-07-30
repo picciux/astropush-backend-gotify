@@ -1,0 +1,4 @@
+backend/backend.sh /usr/share/astropush/backends/gotify
+backend/gotify-init /usr/share/astropush/backends/gotify
+backend/app-icons/*.png /usr/share/astropush/backends/gotify/app-icons
+backend/backend.gotify.conf.sample /etc/astropush

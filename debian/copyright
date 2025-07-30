@@ -1,0 +1,67 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: astropush-backend-gotify
+Upstream-Contact: Matteo Piscitelli <matteo@matteopiscitelli.it>
+Source: https://gitbuh.com/picciux/astropush
+
+Files:     *
+Copyright: 2022-2025 Matteo Piscitelli <matteo@matteopiscitelli.it>
+License:   GPL-3.0+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ .
+ AstroPush log backend install script                 #
+ .
+ On Debian systems, the complete text of the GNU General Public License
+ Version 3 can be found in `/usr/share/common-licenses/GPL-3'.
+
+Files:     backend/app-icons/*
+Copyright: The KStars teams
+License:   CC-BY-SA-4.0
+ This work is licensed under Creative Commons Attribution-ShareAlike
+ 4.0 International. To view a copy of this license, visit
+ https://creativecommons.org/licenses/by-sa/4.0
+
+Files:     backend/app-icons/os.png
+Copyright: Larry Ewing, Simon Budig
+License:   public-domain
+ This is the Linux-penguin again...
+ .
+ Originally drewn by Larry Ewing (http://www.isc.tamu.edu/~lewing/)
+ (with the GIMP) the Linux Logo has been vectorized by me (Simon Budig,
+ http://www.home.unix-ag.org/simon/).
+ .
+ This happened quite some time ago with Corel Draw 4. But luckily
+ meanwhile there are tools available to handle vector graphics with
+ Linux. Bernhard Herzog (bernhard@users.sourceforge.net) deserves kudos
+ for creating Sketch (http://sketch.sourceforge.net), a powerful free
+ tool for creating vector graphics. He converted the Corel Draw file to
+ the Sketch native format. Since I am unable to maintain the Corel Draw
+ file any longer, the Sketch version now is the "official" one.
+ .
+ Anja Gerwinski (anja@gerwinski.de) has created an alternate version of
+ the penguin (penguin-variant.sk) with a thinner mouth line and slightly
+ altered gradients. It also features a nifty drop shadow.
+ .
+ The third bird (penguin-flat.sk) is a version reduced to three colors
+ (black/white/yellow) for e.g. silk screen printing. I made this version
+ for a mug, available at the friendly folks at
+ http://www.kernelconcepts.de/ - they do good stuff, mail Petra
+ (pinguin@kernelconcepts.de) if you need something special or don't
+ understand the german  :-)
+ .
+ These drawings are copyrighted by Larry Ewing and Simon Budig
+ (penguin-variant.sk also by Anja Gerwinski), redistribution is free but
+ has to include this README/Copyright notice.
+ .
+ The use of these drawings is free. However I am happy about a sample of
+ your mug/t-shirt/whatever with this penguin on it...
