@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ##############################################################
-# AstroPush Gotify backend install script              #
+# AstroPush Gotify backend install script                    #
 ##############################################################
 
 PREFIX=
